@@ -3,7 +3,6 @@ import matplotlib.patches as patches
 import tkinter as tk
 import math
 
-# Constantes de dimensões e comprimentos
 PLACA_W = 0.625
 PLACA_H = 1.25
 CANTONEIRA = 3.00
@@ -19,7 +18,6 @@ SALAS = {
     "Sanitário Feminino": (4.00, 2.80)
 }
 
-
 class Layout:
     def __init__(self, root):
         self.root = root
@@ -30,9 +28,7 @@ class Layout:
         self.roll_height = tk.DoubleVar(value=150)
         self.cuts = []
 
-
 def calcular_materiais(comp, larg):
-    # Determina o sentido da paginação
     if comp >= larg:
         sentido = "horizontal"
         n_placas_linha = math.ceil(comp / PLACA_H)
@@ -83,12 +79,10 @@ def calcular_materiais(comp, larg):
         "sobra_perfil_derivado": sobra_perfil_derivado
     }
 
-
 def desenhar_sala(sala_nome, comp, larg):
     materiais = calcular_materiais(comp, larg)
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    # Desenhar placas
     for i in range(materiais["n_linhas"]):
         for j in range(materiais["n_placas_linha"]):
             x = j * materiais["dim_placa1"]
@@ -102,7 +96,6 @@ def desenhar_sala(sala_nome, comp, larg):
             )
             ax.add_patch(rect)
 
-    # Contorno da sala
     outline = patches.Rectangle(
         (0, 0), comp, larg,
         linewidth=2, edgecolor='blue',
@@ -110,12 +103,10 @@ def desenhar_sala(sala_nome, comp, larg):
     )
     ax.add_patch(outline)
 
-    # Perfis principais (vermelho)
     for j in range(1, materiais["n_placas_linha"]):
         x = j * materiais["dim_placa1"]
         ax.plot([x, x], [0, larg], color='red', linewidth=1)
 
-    # Perfis derivados (amarelo)
     for i in range(1, materiais["n_linhas"]):
         y = i * materiais["dim_placa2"]
         ax.plot([0, comp], [y, y], color='yellow', linewidth=1)
@@ -142,7 +133,6 @@ def desenhar_sala(sala_nome, comp, larg):
     ax.axis('off')
     plt.tight_layout()
     plt.show()
-
 
 if __name__ == "__main__":
     for nome, (comp, larg) in SALAS.items():
